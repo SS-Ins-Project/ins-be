@@ -8,7 +8,7 @@ router.use(express.json());
 router.get('/getOptionsByQuestion', async (req, res) => {
     try {
         const questionId = req.query.questionId;
-        const makeId = req.query.makeId;
+        const dependentQuestionValue = req.query.dependentQuestionValue;
         
         // Fetch the dependent question
         const dependentResult = await pool.query(
@@ -16,20 +16,32 @@ router.get('/getOptionsByQuestion', async (req, res) => {
             [questionId]
         );
         const dependent = dependentResult.rows[0];
-        if (dependent.dependent_question !== null && !makeId) {
+        if (dependent.dependent_question !== null && questionId == 2000000002) {
             // Logic for Make
-            const result = await pool.query(
-                'SELECT DISTINCT "make" FROM "OINS_SS".car_data;'
+            const makeRows = await pool.query(
+                'SELECT DISTINCT "make" FROM "OINS_SS".car_data ORDER BY "make";'
             );
-            res.json(result.rows);
-        } else if (dependent.dependent_question && makeId) {
+            const result = makeRows.rows.map(({make}) => {
+                return {
+                    answer_name: make,
+                    questionId: questionId
+                }
+            })
+            res.json(result);
+        } else if (dependent.dependent_question && dependentQuestionValue && questionId == 2000000015) {
             // Ensure makeId is treated as text
-            const result = await pool.query(
-                'SELECT "car_data_id", "make", "model", "year" FROM "OINS_SS".car_data WHERE "make" = $1;', 
-                [makeId]
+            const modelRows = await pool.query(
+                'SELECT DISTINCT "model" FROM "OINS_SS".car_data WHERE "make" = $1 ORDER BY "model";', 
+                [dependentQuestionValue]
             );
-            res.json(result.rows);
-        } else if (dependent.dependent_question == null && !makeId){
+            const result = modelRows.rows.map(({model}) => {
+                return {
+                    answer_name: model,
+                    questionId: questionId
+                }
+            })
+            res.json(result);
+        } else if (dependent.dependent_question == null && !dependentQuestionValue){
             const result = await pool.query(
                 'SELECT "answer_option_id", "answer_name", "question_id" FROM "OINS_SS".answer_options WHERE "question_id" = $1;', 
                 [questionId]
