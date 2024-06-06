@@ -7,6 +7,7 @@ const pool = require('./db');
 var questionnaireController = require('./controllers/questionnaireController');
 var questionsController = require('./controllers/questionsController');
 var optionsController = require('./controllers/optionsController');
+var tariffController = require('./controllers/tariffController');
 
 app.use(cors());
 app.listen(PORT, () => {
@@ -16,7 +17,7 @@ app.listen(PORT, () => {
 app.use('/api/questionnaire', questionnaireController);
 app.use('/api/questions', questionsController);
 app.use('/api/options', optionsController);
-
+app.use('/api/tariff', tariffController);
 
 app.get('/', (req, res) => {
     res.send('Started Working, Express!');
