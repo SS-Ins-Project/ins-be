@@ -1,26 +1,27 @@
+const { appPort, httpPort, keyPath, certPath } = require('./utils/appConstants');
+
 const fs = require('fs');
 const https = require('https');
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const port = 443;
 const pool = require('./db');
 
 const options = {
-    key: fs.readFileSync('C:/Users/stasi/key.pem'),
-    cert: fs.readFileSync('C:/Users/stasi/cert.pem')
+    key: fs.readFileSync(keyPath),
+    cert: fs.readFileSync(certPath)
   };
 
-var questionnaireController = require('./controllers/questionnaireController');
-var questionsController = require('./controllers/questionsController');
-var optionsController = require('./controllers/optionsController');
-var tariffController = require('./controllers/tariffController');
+var questionnaireRoutes = require('./routes/questionnaireRoutes');
+var questionsRoutes = require('./routes/questionsRoutes');
+var optionsRoutes = require('./routes/optionsRoutes');
+var tariffRoutes = require('./routes/tariffRoutes');
 
 app.use(cors());
 app.use(express.json());
 // Start HTTPS server
-https.createServer(options, app).listen(port, () => {
-    console.log(`Secure server running on port ${port}`);
+https.createServer(options, app).listen(appPort, () => {
+    console.log(`Secure server running on port ${appPort}`);
   });
 
   const http = express();
@@ -31,15 +32,14 @@ https.createServer(options, app).listen(port, () => {
     next();
   });
   
-  const httpPort = 80;
   http.listen(httpPort, () => {
     console.log(`HTTP server running on port ${httpPort}, redirecting to HTTPS`);
   });
 
-app.use('/api/questionnaire', questionnaireController);
-app.use('/api/questions', questionsController);
-app.use('/api/options', optionsController);
-app.use('/api/tariff', tariffController);
+app.use('/api/questionnaire', questionnaireRoutes);
+app.use('/api/questions', questionsRoutes);
+app.use('/api/options', optionsRoutes);
+app.use('/api/tariff', tariffRoutes);
 
 app.get('/', (req, res) => {
     res.send('Started Working, Express!');
