@@ -12,7 +12,7 @@ router.get('/getOptionsByQuestion', async (req, res) => {
         
         // Fetch the dependent question
         const dependentResult = await pool.query(
-            'SELECT "dependent_question" FROM "OINS_SS".questionnaire_questions WHERE "question_id" = $1;', 
+            'SELECT "dependent_question" FROM "OINS_SS".questionnaire_question WHERE "question_id" = $1;', 
             [questionId]
         );
         const dependent = dependentResult.rows[0];
@@ -43,7 +43,7 @@ router.get('/getOptionsByQuestion', async (req, res) => {
             res.json(result);
         } else if (dependent.dependent_question == null && !dependentQuestionValue){
             const result = await pool.query(
-                'SELECT "answer_option_id", "answer_name", "question_id" FROM "OINS_SS".answer_options WHERE "question_id" = $1;', 
+                'SELECT "answer_option_id", "answer_name", "question_id" FROM "OINS_SS".answer_option WHERE "question_id" = $1;', 
                 [questionId]
             );
             res.json(result.rows);

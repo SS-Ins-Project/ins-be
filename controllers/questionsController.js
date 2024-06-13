@@ -12,7 +12,7 @@ router.get("/getQuestionsByQuestionnaire", async (req, res) => {
     const result = await pool.query(
       'SELECT "question_id", "question_name",' +
         '"question_hint", "answer_type", "question_required", "questionnaire_id", ' +
-        '"dependent_question", "question_position" FROM "OINS_SS".questionnaire_questions WHERE questionnaire_id = $1;',
+        '"dependent_question", "question_position" FROM "OINS_SS".questionnaire_question WHERE questionnaire_id = $1;',
       [questionnaireId]
     );
     res.json(result.rows);
@@ -29,10 +29,10 @@ router.get("/getQuestionsByQuestionnaireWithOptions", async (req, res) => {
       const allQuestions = await pool.query(
         'SELECT "question_id", "question_name",' +
           '"question_hint", "answer_type", "question_required", "questionnaire_id", ' +
-          '"dependent_question", "question_position" FROM "OINS_SS".questionnaire_questions WHERE questionnaire_id = $1;',
+          '"dependent_question", "question_position" FROM "OINS_SS".questionnaire_question WHERE questionnaire_id = $1;',
         [questionnaireId]
       );
-      const allOptions = await pool.query('SELECT "answer_option_id", "answer_name", "question_id" FROM "OINS_SS".answer_options');
+      const allOptions = await pool.query('SELECT "answer_option_id", "answer_name", "question_id" FROM "OINS_SS".answer_option');
 
       const result = allQuestions.rows.map(question => {
         if(question.answer_type === 'SELECT') {
