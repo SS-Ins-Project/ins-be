@@ -27,9 +27,9 @@ const processAnswers = async (answers) => {
 
   let premiums = [];
 
-  for (let i = flg_0; i <= flg_4; i++) {
-    let premium = insValue * baseCoef;
-    premium += premium * (premiumCoef / flg_100);
+  for (let i = flg_0; i <= ins_period; i++) {
+    let premium = insValue * baseCoef; // baseCoef is based on whether the car is brand new or not - 0.05/0.10
+    premium += premium * (premiumCoef / flg_100); // premiumCoef is based on all discounts and loadings
     premium += premium * VAT_value; // 2% Tax
     premiums.push({
       year: i,

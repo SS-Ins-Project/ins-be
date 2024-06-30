@@ -6,6 +6,8 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const pool = require('./db');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swaggerConfig');
 
 const options = {
     key: fs.readFileSync(keyPath),
@@ -40,6 +42,7 @@ app.use('/api/questionnaire', questionnaireRoutes);
 app.use('/api/questions', questionsRoutes);
 app.use('/api/options', optionsRoutes);
 app.use('/api/tariff', tariffRoutes);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.get('/', (req, res) => {
     res.send('Started Working, Express!');

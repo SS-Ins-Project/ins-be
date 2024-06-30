@@ -15,7 +15,7 @@ const getOptionsByQuestion = async (questionId, dependentQuestionValue) => {
     );
     return makeRows.rows.map(({ make }) => ({
       answer_name: make,
-      questionId: questionId
+      question_id: questionId
     }));
   } else if (dependent.dependent_question && dependentQuestionValue && questionId == model_question) {
     const modelRows = await pool.query(
@@ -24,7 +24,7 @@ const getOptionsByQuestion = async (questionId, dependentQuestionValue) => {
     );
     return modelRows.rows.map(({ model }) => ({
       answer_name: model,
-      questionId: questionId
+      question_id: questionId
     }));
   } else if (dependent.dependent_question == null && !dependentQuestionValue) {
     const result = await pool.query(
