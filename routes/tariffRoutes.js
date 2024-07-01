@@ -9,7 +9,7 @@ router.use(express.json());
  * @swagger
  * /processAnswers:
  *   post:
- *     summary: Process the answers and calculate the tariff
+ *     summary: Process the answers and calculate the premium
  *     requestBody:
  *       required: true
  *       content:

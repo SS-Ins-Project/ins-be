@@ -47,7 +47,7 @@ router.get('/getQuestionsByQuestionnaire', questionsController.getQuestionsByQue
  * @swagger
  * /getQuestionsByQuestionnaireWithOptions:
  *   get:
- *     summary: Retrieve questions with options for a specific questionnaire
+ *     summary: Retrieve questions with their respective answer options for a specific questionnaire
  *     parameters:
  *       - in: query
  *         name: questionnaireId
